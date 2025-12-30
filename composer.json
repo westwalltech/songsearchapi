@@ -1,0 +1,60 @@
+{
+    "name": "newsong/song-search",
+    "description": "A Statamic addon for searching and selecting songs from Spotify and Apple Music",
+    "type": "statamic-addon",
+    "version": "1.0.0",
+    "license": "MIT",
+    "keywords": [
+        "statamic",
+        "addon",
+        "music",
+        "spotify",
+        "apple-music",
+        "fieldtype"
+    ],
+    "authors": [
+        {
+            "name": "NewSong Church",
+            "email": "tech@newsongpeople.com",
+            "homepage": "https://newsongchurch.org"
+        }
+    ],
+    "require": {
+        "php": "^8.2|^8.3",
+        "statamic/cms": "^5.0",
+        "guzzlehttp/guzzle": "^7.0",
+        "firebase/php-jwt": "^6.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^9.0",
+        "phpunit/phpunit": "^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "NewSong\\SongSearch\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "NewSong\\SongSearch\\Tests\\": "tests"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "pixelfear/composer-dist-plugin": true
+        }
+    },
+    "extra": {
+        "statamic": {
+            "name": "Song Search",
+            "description": "Search and select songs from Spotify and Apple Music"
+        },
+        "laravel": {
+            "providers": [
+                "NewSong\\SongSearch\\ServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

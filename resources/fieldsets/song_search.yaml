@@ -1,0 +1,16 @@
+title: 'Song Search'
+fields:
+  -
+    handle: song_search
+    field:
+      type: song_search
+      display: 'Song Search'
+      instructions: 'Search for a song to populate song details and artwork'
+      icon: audio-file
+      listable: hidden
+      title_field: title
+      artist_field: subtitle
+      apple_music_url_field: apple_music_url
+      spotify_url_field: spotify_url
+      artwork_field: featured_media
+      auto_download_artwork: true
