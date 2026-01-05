@@ -69,11 +69,14 @@ class SongSearchController extends Controller
         // Merge results by ISRC if available, otherwise keep separate
         $mergedResults = $this->mergeResultsByISRC($results);
 
+        // Filter out explicit content
+        $filteredResults = $this->filterExplicitContent($mergedResults);
+
         return response()->json([
             'success' => true,
-            'results' => array_values($mergedResults),
+            'results' => array_values($filteredResults),
             'errors' => $errors,
-            'total' => count($mergedResults),
+            'total' => count($filteredResults),
         ]);
     }
 
@@ -161,5 +164,41 @@ class SongSearchController extends Controller
 
         // Combine results, with ISRC-matched first (they have more data)
         return array_merge(array_values($byISRC), $withoutISRC);
+    }
+
+    /**
+     * Filter out songs with explicit/profane content in title, artist, or album
+     */
+    protected function filterExplicitContent(array $results): array
+    {
+        // Common profanity/explicit words to filter (case-insensitive)
+        // Note: "hell" and "damn" omitted as they appear in legitimate worship contexts
+        $explicitWords = [
+            'fuck', 'fucking', 'fucked', 'fucker', 'fuckin', 'motherfucker', 'wtf',
+            'shit', 'shitting', 'bullshit', 'shitty',
+            'bitch', 'bitches', 'bitching',
+            'asshole', 'asses',
+            'cunt', 'cunts',
+            'dick', 'dicks',
+            'cock', 'cocks',
+            'pussy', 'pussies',
+            'whore', 'whores',
+            'nigga', 'nigger', 'niggas',
+            'slut', 'sluts',
+        ];
+
+        // Build regex pattern with word boundaries
+        $pattern = '/\b(' . implode('|', array_map('preg_quote', $explicitWords)) . ')\b/i';
+
+        return array_filter($results, function ($result) use ($pattern) {
+            $textToCheck = implode(' ', [
+                $result['title'] ?? '',
+                $result['artist'] ?? '',
+                $result['album'] ?? '',
+            ]);
+
+            // Return true to KEEP the result (no explicit content found)
+            return !preg_match($pattern, $textToCheck);
+        });
     }
 }
