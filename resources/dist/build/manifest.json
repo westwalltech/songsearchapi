@@ -1,11 +1,11 @@
 {
   "resources/js/addon.js": {
-    "file": "assets/addon-DxOPO31G.js",
+    "file": "assets/addon-reULS7OG.js",
     "name": "addon",
     "src": "resources/js/addon.js",
     "isEntry": true,
     "css": [
-      "assets/addon-BIz89QQ7.css"
+      "assets/addon-eU6HFFvb.css"
     ]
   }
 }
