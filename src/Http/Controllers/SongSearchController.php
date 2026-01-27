@@ -5,9 +5,9 @@ namespace NewSong\SongSearch\Http\Controllers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use NewSong\SongSearch\Services\SpotifyService;
 use NewSong\SongSearch\Services\AppleMusicService;
 use NewSong\SongSearch\Services\ArtworkDownloader;
+use NewSong\SongSearch\Services\SpotifyService;
 
 class SongSearchController extends Controller
 {
@@ -48,7 +48,7 @@ class SongSearchController extends Controller
                 $spotifyResults = $this->spotify->searchSongs($query);
                 $results = array_merge($results, $spotifyResults);
             } catch (\Exception $e) {
-                $errors['spotify'] = 'Failed to search Spotify: ' . $e->getMessage();
+                $errors['spotify'] = 'Failed to search Spotify: '.$e->getMessage();
             }
         } else {
             $errors['spotify'] = 'Spotify API is not configured';
@@ -60,7 +60,7 @@ class SongSearchController extends Controller
                 $appleResults = $this->appleMusic->searchSongs($query);
                 $results = array_merge($results, $appleResults);
             } catch (\Exception $e) {
-                $errors['apple_music'] = 'Failed to search Apple Music: ' . $e->getMessage();
+                $errors['apple_music'] = 'Failed to search Apple Music: '.$e->getMessage();
             }
         } else {
             $errors['apple_music'] = 'Apple Music API is not configured';
@@ -113,7 +113,7 @@ class SongSearchController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error downloading artwork: ' . $e->getMessage(),
+                'message' => 'Error downloading artwork: '.$e->getMessage(),
             ], 500);
         }
     }
@@ -131,25 +131,25 @@ class SongSearchController extends Controller
             $isrc = $result['isrc'] ?? null;
 
             if ($isrc) {
-                if (!isset($byISRC[$isrc])) {
+                if (! isset($byISRC[$isrc])) {
                     $byISRC[$isrc] = $result;
                     // Mark that this song has both platforms if it comes from one
-                    $byISRC[$isrc]['has_spotify'] = !empty($result['spotify_url']);
-                    $byISRC[$isrc]['has_apple_music'] = !empty($result['apple_music_url']);
+                    $byISRC[$isrc]['has_spotify'] = ! empty($result['spotify_url']);
+                    $byISRC[$isrc]['has_apple_music'] = ! empty($result['apple_music_url']);
                 } else {
                     // Merge URLs from different sources
-                    if (!empty($result['spotify_url']) && empty($byISRC[$isrc]['spotify_url'])) {
+                    if (! empty($result['spotify_url']) && empty($byISRC[$isrc]['spotify_url'])) {
                         $byISRC[$isrc]['spotify_url'] = $result['spotify_url'];
                         $byISRC[$isrc]['spotify_id'] = $result['spotify_id'] ?? null;
                         $byISRC[$isrc]['has_spotify'] = true;
                     }
-                    if (!empty($result['apple_music_url']) && empty($byISRC[$isrc]['apple_music_url'])) {
+                    if (! empty($result['apple_music_url']) && empty($byISRC[$isrc]['apple_music_url'])) {
                         $byISRC[$isrc]['apple_music_url'] = $result['apple_music_url'];
                         $byISRC[$isrc]['apple_music_id'] = $result['apple_music_id'] ?? null;
                         $byISRC[$isrc]['has_apple_music'] = true;
                     }
                     // Prefer Spotify artwork (usually higher quality)
-                    if (empty($byISRC[$isrc]['artwork_url']) && !empty($result['artwork_url'])) {
+                    if (empty($byISRC[$isrc]['artwork_url']) && ! empty($result['artwork_url'])) {
                         $byISRC[$isrc]['artwork_url'] = $result['artwork_url'];
                     }
                     // Update source to indicate merged
@@ -188,7 +188,7 @@ class SongSearchController extends Controller
         ];
 
         // Build regex pattern with word boundaries
-        $pattern = '/\b(' . implode('|', array_map('preg_quote', $explicitWords)) . ')\b/i';
+        $pattern = '/\b('.implode('|', array_map('preg_quote', $explicitWords)).')\b/i';
 
         return array_filter($results, function ($result) use ($pattern) {
             $textToCheck = implode(' ', [
@@ -198,7 +198,7 @@ class SongSearchController extends Controller
             ]);
 
             // Return true to KEEP the result (no explicit content found)
-            return !preg_match($pattern, $textToCheck);
+            return ! preg_match($pattern, $textToCheck);
         });
     }
 }

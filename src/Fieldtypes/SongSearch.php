@@ -26,7 +26,7 @@ class SongSearch extends Fieldtype
      */
     public function preProcess($data)
     {
-        if (!is_array($data)) {
+        if (! is_array($data)) {
             return $this->defaultValue();
         }
 
@@ -38,7 +38,7 @@ class SongSearch extends Fieldtype
      */
     public function process($data)
     {
-        if (!is_array($data)) {
+        if (! is_array($data)) {
             return $this->defaultValue();
         }
 
@@ -53,7 +53,7 @@ class SongSearch extends Fieldtype
      */
     public function augment($value)
     {
-        if (!is_array($value)) {
+        if (! is_array($value)) {
             return ['searched' => false];
         }
 

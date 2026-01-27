@@ -22,7 +22,7 @@ class AppleMusicService
 
         // Resolve the private key path - handle both absolute and relative paths
         $configPath = config('song-search.apple_music.private_key_path');
-        if ($configPath && !str_starts_with($configPath, '/')) {
+        if ($configPath && ! str_starts_with($configPath, '/')) {
             // Relative path - resolve from base path
             $this->privateKeyPath = base_path($configPath);
         } else {
@@ -40,9 +40,9 @@ class AppleMusicService
      */
     public function isConfigured(): bool
     {
-        return !empty($this->teamId)
-            && !empty($this->keyId)
-            && !empty($this->privateKeyPath)
+        return ! empty($this->teamId)
+            && ! empty($this->keyId)
+            && ! empty($this->privateKeyPath)
             && file_exists($this->privateKeyPath);
     }
 
@@ -51,7 +51,7 @@ class AppleMusicService
      */
     protected function getToken(): ?string
     {
-        if (!$this->isConfigured()) {
+        if (! $this->isConfigured()) {
             return null;
         }
 
@@ -70,8 +70,9 @@ class AppleMusicService
     protected function generateJWT(): ?string
     {
         try {
-            if (!file_exists($this->privateKeyPath)) {
-                Log::error('Apple Music private key file not found: ' . $this->privateKeyPath);
+            if (! file_exists($this->privateKeyPath)) {
+                Log::error('Apple Music private key file not found: '.$this->privateKeyPath);
+
                 return null;
             }
 
@@ -79,6 +80,7 @@ class AppleMusicService
 
             if ($privateKey === false) {
                 Log::error('Apple Music: Unable to read private key file');
+
                 return null;
             }
 
@@ -95,7 +97,8 @@ class AppleMusicService
             // JWT::encode requires: payload, key, algorithm, keyId
             return JWT::encode($payload, $privateKey, 'ES256', $this->keyId);
         } catch (\Exception $e) {
-            Log::error('Apple Music JWT Generation Error: ' . $e->getMessage());
+            Log::error('Apple Music JWT Generation Error: '.$e->getMessage());
+
             return null;
         }
     }
@@ -103,15 +106,16 @@ class AppleMusicService
     /**
      * Search for songs by query
      *
-     * @param string $query Search query (song title, artist, etc.)
-     * @param string|null $storefront Country code (default from config or 'us')
+     * @param  string  $query  Search query (song title, artist, etc.)
+     * @param  string|null  $storefront  Country code (default from config or 'us')
      * @return array Normalized song results
      */
     public function searchSongs(string $query, ?string $storefront = null): array
     {
         $token = $this->getToken();
-        if (!$token) {
+        if (! $token) {
             Log::warning('Apple Music: Unable to get developer token');
+
             return [];
         }
 
@@ -137,7 +141,7 @@ class AppleMusicService
 
                 // Get high-res artwork URL (replace {w}x{h} with actual size)
                 $artworkUrl = null;
-                if (!empty($attributes['artwork']['url'])) {
+                if (! empty($attributes['artwork']['url'])) {
                     $size = config('song-search.artwork.preferred_size', 640);
                     $artworkUrl = str_replace(
                         ['{w}', '{h}'],
@@ -159,7 +163,8 @@ class AppleMusicService
                 ];
             }, $songs);
         } catch (\Exception $e) {
-            Log::error('Apple Music Search Error: ' . $e->getMessage());
+            Log::error('Apple Music Search Error: '.$e->getMessage());
+
             return [];
         }
     }

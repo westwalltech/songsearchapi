@@ -23,9 +23,9 @@ class ArtworkDownloader
     /**
      * Download artwork and create a Statamic asset
      *
-     * @param string $url The artwork URL
-     * @param string $title Song title for filename
-     * @param string $artist Artist name for filename
+     * @param  string  $url  The artwork URL
+     * @param  string  $title  Song title for filename
+     * @param  string  $artist  Artist name for filename
      * @return string|null The asset ID or null on failure
      */
     public function downloadAndCreateAsset(string $url, string $title, string $artist): ?string
@@ -39,24 +39,26 @@ class ArtworkDownloader
 
             // Check if asset container exists
             $container = AssetContainer::find($containerHandle);
-            if (!$container) {
+            if (! $container) {
                 Log::error("Song Search: Asset container '{$containerHandle}' not found");
+
                 return null;
             }
 
             // Build the asset path
-            $path = $folder . '/' . $filename;
+            $path = $folder.'/'.$filename;
 
             // Check if asset already exists
             $existingAsset = Asset::find("{$containerHandle}::{$path}");
             if ($existingAsset) {
                 // Asset already exists, return its ID
                 Log::info("Song Search: Asset already exists at {$path}");
+
                 return $existingAsset->id();
             }
 
             // Download the image to a temp file
-            $tempPath = sys_get_temp_dir() . '/' . uniqid('artwork_') . '_' . $filename;
+            $tempPath = sys_get_temp_dir().'/'.uniqid('artwork_').'_'.$filename;
             $response = $this->client->get($url, [
                 'sink' => $tempPath,
             ]);
@@ -66,13 +68,13 @@ class ArtworkDownloader
             $extension = $this->getExtensionFromContentType($contentType);
 
             // Rename file if extension doesn't match
-            if ($extension && !Str::endsWith(strtolower($filename), '.' . $extension)) {
-                $newFilename = pathinfo($filename, PATHINFO_FILENAME) . '.' . $extension;
-                $newTempPath = sys_get_temp_dir() . '/' . uniqid('artwork_') . '_' . $newFilename;
+            if ($extension && ! Str::endsWith(strtolower($filename), '.'.$extension)) {
+                $newFilename = pathinfo($filename, PATHINFO_FILENAME).'.'.$extension;
+                $newTempPath = sys_get_temp_dir().'/'.uniqid('artwork_').'_'.$newFilename;
                 rename($tempPath, $newTempPath);
                 $tempPath = $newTempPath;
                 $filename = $newFilename;
-                $path = $folder . '/' . $filename;
+                $path = $folder.'/'.$filename;
             }
 
             // Create an UploadedFile instance
@@ -102,9 +104,11 @@ class ArtworkDownloader
             }
 
             Log::info("Song Search: Created asset at {$path}");
+
             return $asset->id();
         } catch (\Exception $e) {
-            Log::error('Song Search Artwork Download Error: ' . $e->getMessage());
+            Log::error('Song Search Artwork Download Error: '.$e->getMessage());
+
             return null;
         }
     }
@@ -114,12 +118,13 @@ class ArtworkDownloader
      */
     protected function generateFilename(string $title, string $artist): string
     {
-        $slug = Str::slug($artist . '-' . $title);
+        $slug = Str::slug($artist.'-'.$title);
         // Limit length
         $slug = Str::limit($slug, 100, '');
         // Remove any trailing hyphens
         $slug = rtrim($slug, '-');
-        return $slug . '.jpg';
+
+        return $slug.'.jpg';
     }
 
     /**

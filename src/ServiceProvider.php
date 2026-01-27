@@ -2,10 +2,10 @@
 
 namespace NewSong\SongSearch;
 
-use Statamic\Providers\AddonServiceProvider;
-use Statamic\Facades\Permission;
 use NewSong\SongSearch\Fieldtypes\SongSearch;
 use NewSong\SongSearch\Support\Logger;
+use Statamic\Facades\Permission;
+use Statamic\Providers\AddonServiceProvider;
 
 class ServiceProvider extends AddonServiceProvider
 {
@@ -68,7 +68,7 @@ class ServiceProvider extends AddonServiceProvider
      */
     protected function registerLoggingChannel(): void
     {
-        if (!config('song-search.logging.enabled', true)) {
+        if (! config('song-search.logging.enabled', true)) {
             return;
         }
 
@@ -85,7 +85,7 @@ class ServiceProvider extends AddonServiceProvider
      */
     protected function validateProductionConfig(): void
     {
-        if (!$this->app->environment('production')) {
+        if (! $this->app->environment('production')) {
             return;
         }
 
@@ -97,15 +97,15 @@ class ServiceProvider extends AddonServiceProvider
         }
 
         // Check Apple Music API
-        $appleMusicConfigured = !empty(config('song-search.apple_music.team_id')) &&
-            !empty(config('song-search.apple_music.key_id')) &&
-            !empty(config('song-search.apple_music.private_key_path'));
+        $appleMusicConfigured = ! empty(config('song-search.apple_music.team_id')) &&
+            ! empty(config('song-search.apple_music.key_id')) &&
+            ! empty(config('song-search.apple_music.private_key_path'));
 
-        if (!$appleMusicConfigured) {
+        if (! $appleMusicConfigured) {
             $warnings[] = 'Apple Music API credentials not fully configured';
         }
 
-        if (!empty($warnings)) {
+        if (! empty($warnings)) {
             Logger::warning('API credentials not fully configured', [
                 'missing' => $warnings,
                 'recommendation' => 'Set missing environment variables for full song search functionality.',

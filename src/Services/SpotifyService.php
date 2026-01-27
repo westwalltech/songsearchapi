@@ -29,7 +29,7 @@ class SpotifyService
      */
     public function isConfigured(): bool
     {
-        return !empty($this->clientId) && !empty($this->clientSecret);
+        return ! empty($this->clientId) && ! empty($this->clientSecret);
     }
 
     /**
@@ -37,27 +37,29 @@ class SpotifyService
      */
     protected function getAccessToken(): ?string
     {
-        if (!$this->isConfigured()) {
+        if (! $this->isConfigured()) {
             return null;
         }
 
         return Cache::remember('spotify_song_search_token', 3600, function () {
             try {
-                $client = new Client();
+                $client = new Client;
                 $response = $client->post('https://accounts.spotify.com/api/token', [
                     'form_params' => [
                         'grant_type' => 'client_credentials',
                     ],
                     'headers' => [
-                        'Authorization' => 'Basic ' . base64_encode($this->clientId . ':' . $this->clientSecret),
+                        'Authorization' => 'Basic '.base64_encode($this->clientId.':'.$this->clientSecret),
                         'Content-Type' => 'application/x-www-form-urlencoded',
                     ],
                 ]);
 
                 $data = json_decode($response->getBody()->getContents(), true);
+
                 return $data['access_token'] ?? null;
             } catch (\Exception $e) {
-                Log::error('Spotify Auth Error: ' . $e->getMessage());
+                Log::error('Spotify Auth Error: '.$e->getMessage());
+
                 return null;
             }
         });
@@ -66,14 +68,15 @@ class SpotifyService
     /**
      * Search for songs by query
      *
-     * @param string $query Search query (song title, artist, etc.)
+     * @param  string  $query  Search query (song title, artist, etc.)
      * @return array Normalized song results
      */
     public function searchSongs(string $query): array
     {
         $token = $this->getAccessToken();
-        if (!$token) {
+        if (! $token) {
             Log::warning('Spotify: Unable to get access token');
+
             return [];
         }
 
@@ -96,7 +99,7 @@ class SpotifyService
                 // Get the largest album artwork available
                 $artworkUrl = null;
                 $images = $track['album']['images'] ?? [];
-                if (!empty($images)) {
+                if (! empty($images)) {
                     // Images are sorted by size descending
                     $artworkUrl = $images[0]['url'];
                 }
@@ -114,7 +117,8 @@ class SpotifyService
                 ];
             }, $tracks);
         } catch (\Exception $e) {
-            Log::error('Spotify Search Error: ' . $e->getMessage());
+            Log::error('Spotify Search Error: '.$e->getMessage());
+
             return [];
         }
     }

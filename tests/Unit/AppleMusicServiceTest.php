@@ -10,7 +10,7 @@ describe('isConfigured', function () {
             'song-search.apple_music.private_key_path' => '/nonexistent/path/key.p8',
         ]);
 
-        $service = new AppleMusicService();
+        $service = new AppleMusicService;
         expect($service->isConfigured())->toBeFalse();
     });
 
@@ -21,7 +21,7 @@ describe('isConfigured', function () {
             'song-search.apple_music.private_key_path' => __FILE__, // Use this file as a "key" for testing
         ]);
 
-        $service = new AppleMusicService();
+        $service = new AppleMusicService;
         expect($service->isConfigured())->toBeFalse();
     });
 
@@ -32,7 +32,7 @@ describe('isConfigured', function () {
             'song-search.apple_music.private_key_path' => __FILE__,
         ]);
 
-        $service = new AppleMusicService();
+        $service = new AppleMusicService;
         expect($service->isConfigured())->toBeFalse();
     });
 
@@ -43,7 +43,7 @@ describe('isConfigured', function () {
             'song-search.apple_music.private_key_path' => null,
         ]);
 
-        $service = new AppleMusicService();
+        $service = new AppleMusicService;
         expect($service->isConfigured())->toBeFalse();
     });
 
@@ -54,14 +54,14 @@ describe('isConfigured', function () {
             'song-search.apple_music.private_key_path' => __FILE__, // Use this file as stand-in
         ]);
 
-        $service = new AppleMusicService();
+        $service = new AppleMusicService;
         expect($service->isConfigured())->toBeTrue();
     });
 });
 
 describe('clearTokenCache', function () {
     it('clears the token cache without error', function () {
-        $service = new AppleMusicService();
+        $service = new AppleMusicService;
 
         // Should not throw
         $service->clearTokenCache();

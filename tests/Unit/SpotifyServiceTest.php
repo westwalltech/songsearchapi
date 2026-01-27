@@ -9,7 +9,7 @@ describe('isConfigured', function () {
             'song-search.spotify.client_secret' => 'test-secret',
         ]);
 
-        $service = new SpotifyService();
+        $service = new SpotifyService;
         expect($service->isConfigured())->toBeTrue();
     });
 
@@ -19,7 +19,7 @@ describe('isConfigured', function () {
             'song-search.spotify.client_secret' => 'test-secret',
         ]);
 
-        $service = new SpotifyService();
+        $service = new SpotifyService;
         expect($service->isConfigured())->toBeFalse();
     });
 
@@ -29,7 +29,7 @@ describe('isConfigured', function () {
             'song-search.spotify.client_secret' => '',
         ]);
 
-        $service = new SpotifyService();
+        $service = new SpotifyService;
         expect($service->isConfigured())->toBeFalse();
     });
 
@@ -39,7 +39,7 @@ describe('isConfigured', function () {
             'song-search.spotify.client_secret' => null,
         ]);
 
-        $service = new SpotifyService();
+        $service = new SpotifyService;
         expect($service->isConfigured())->toBeFalse();
     });
 });
