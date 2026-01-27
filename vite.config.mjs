@@ -9,12 +9,11 @@ export default defineConfig({
         strictPort: true,
     },
     plugins: [
+        statamic(),
         laravel({
             input: ['resources/js/addon.js'],
-            publicDirectory: '../../../public/vendor/song-search',
+            publicDirectory: 'resources/dist',
             buildDirectory: 'build',
-            hotFile: '../../../public/vendor/song-search/hot',
         }),
-        statamic(),
     ],
 });
