@@ -2,7 +2,7 @@
     "name": "newsong/song-search",
     "description": "A Statamic addon for searching and selecting songs from Spotify and Apple Music",
     "type": "statamic-addon",
-    "version": "1.1.0",
+    "version": "2.0.0",
     "license": "MIT",
     "keywords": [
         "statamic",
@@ -25,7 +25,7 @@
         "source": "https://github.com/newsong/song-search"
     },
     "require": {
-        "php": "^8.3|^8.4|^8.5",
+        "php": "^8.5",
         "statamic/cms": "^6.0",
         "guzzlehttp/guzzle": "^7.0",
         "firebase/php-jwt": "^6.0"

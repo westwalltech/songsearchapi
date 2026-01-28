@@ -13,8 +13,9 @@ A Statamic addon for searching and selecting songs from Spotify and Apple Music.
 
 ## Requirements
 
-- PHP 8.2+
-- Statamic 5.0+
+- PHP 8.5+
+- Statamic 6.0+
+- Laravel 12+
 - Spotify API credentials (free)
 - Apple Music API credentials (optional, requires Apple Developer account)
 
