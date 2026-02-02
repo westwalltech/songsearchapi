@@ -2,7 +2,6 @@
     "name": "newsong/song-search",
     "description": "A Statamic addon for searching and selecting songs from Spotify and Apple Music",
     "type": "statamic-addon",
-    "version": "2.0.0",
     "license": "MIT",
     "keywords": [
         "statamic",
