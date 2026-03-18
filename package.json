@@ -7,7 +7,7 @@
     },
     "devDependencies": {
         "@statamic/cms": "file:../../../vendor/statamic/cms/packages/cms",
-        "laravel-vite-plugin": "^2",
-        "vite": "^7.0.0"
+        "laravel-vite-plugin": "^3",
+        "vite": "^8.0.0"
     }
 }
